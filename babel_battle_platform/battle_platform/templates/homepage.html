@@ -1,0 +1,83 @@
+<html>
+
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>对战平台</title>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="{% static 'jquery.min.js' %}"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap-confirmation.min.js' %}"></script>
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'battle:homepage' %}"><span>对战平台</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li><a>{{ username }}</a></li>
+                {% else %}
+                    <li><a href="{% url 'battle:login' %}">登录</a></li>
+                {% endif %}
+                <li><a href="{% url 'battle:register' %}">注册</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'battle:logout' %}">退出</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary pull-right popover-toggle" style="margin-left: 10px"
+                        onclick="{location.href={% url 'battle:script_upload' %}}">
+                    <span class="glyphicon glyphicon-plus" ></span> 上传新脚本
+                </button>
+
+                <p style="font-size: 25px"> 对战记录 </p>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td class="active">时间</td>
+                        <td class="active">所选游戏</td>
+                        <td class="active">上传脚本</td>
+                        <td class="active">视频回放</td>
+                    </tr>
+
+
+                    </thead>
+                    <tbody>
+                    {% for record in records %}
+                        <tr>
+                            <th>{{ record.upload_time }}</th>
+                            <th>{{ choices|get_item:record.upload_game }}</th>
+                            <th><a href="{% url 'battle:download' record.upload_script %}">{{ record.upload_script }}</a></th>
+                            <th><a href="{% url 'battle:video_play' record.id %}">回放</a></th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

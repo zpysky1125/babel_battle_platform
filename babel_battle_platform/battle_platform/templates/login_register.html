@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="{% static 'login_style.css' %}">
+</head>
+
+<body>
+
+<div class="pen-title">
+    <h1>Deep Comments</h1>
+</div>
+<!-- Form Module-->
+<div class="module form-module">
+    <div class="toggle"><i class="fa fa-times {% if option == 'login' %}fa-pencil{% endif %}"></i></div>
+    <div class="form" {% if option == 'login' %}style="display: block"{% else %}style="display: none"{% endif %}>
+        <h2>Login to your account</h2>
+        <form method="post" action="{% if next %}{% url 'battle:login' %}?next={{ next }}{% else %}{% url 'battle:login' %}{% endif %}">
+            {% csrf_token %}
+            <input name="username" type="email" placeholder="Email" value="{{ username }}"/>
+            <input name="password" type="password" placeholder="Password" value="{{ password }}"/>
+            <button type="submit">Login</button>
+            <p style="color:#F00">{{ error }}</p>
+        </form>
+    </div>
+
+    <div class="form" {% if option == 'register' %}style="display: block"{% else %}style="display: none"{% endif %}>
+        <h2>Create an account</h2>
+        <form method="post" action="{% url 'battle:register' %}">
+            {% csrf_token %}
+            <input name="r_username" type="email" placeholder="Email" value="{{ r_username }}"/>
+            <input name="r_password1" type="password" placeholder="Password" value="{{ r_password1 }}"/>
+            <input name="r_password2" type="password" placeholder="Password" value="{{ r_password2 }}"/>
+            <button type="submit">Register</button>
+            <p style="color:#F00">{{ r_error }}</p>
+        </form>
+    </div>
+    <div class="cta"><a href="">Forgot your password?</a></div>
+</div>
+
+<script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
+{#<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>#}
+
+<script type="text/javascript">
+    $(function () {
+        $('.toggle').click(function () {
+            // Switches the Icon
+            $(this).children('i').toggleClass('fa-pencil');
+            // Switches the forms
+            $('.form').animate({
+                height: "toggle",
+                'padding-top': 'toggle',
+                'padding-bottom': 'toggle',
+                opacity: "toggle"
+            }, "slow");
+        });
+    });
+</script>
+
+</body>
+</html>

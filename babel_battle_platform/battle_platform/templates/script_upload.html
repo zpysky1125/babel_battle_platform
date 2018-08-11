@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+{% load staticfiles %}
+
+<head>
+    <meta charset="utf-8"/>
+    <title>脚本上传</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'student_form/formoid-solid-green.css' %}" type="text/css"/>
+    <script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap-confirmation.min.js' %}"></script>
+</head>
+
+<body class="blurBg-false" style="background-color:#EBEBEB">
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'battle:homepage' %}"><span>对战平台</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li><a>{{ user.username }}</a></li>
+                {% else %}
+                    <li><a href="{% url 'battle:login' %}">登录</a></li>
+                {% endif %}
+                <li><a href="{% url 'battle:register' %}">注册</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'battle:logout' %}">退出</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<form id="student-form" enctype="multipart/form-data" class="formoid-solid-green"
+      action="{% url 'battle:script_upload' %}"
+      style="background-color:#FFFFFF;font-size:17px;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#34495E;max-width:960px;min-width:150px"
+      method="post">
+    {% csrf_token %}
+    <div class="title"><h2>填写您的对战脚本信息</h2></div>
+
+    <br>
+    <div class="element-radio">
+        <label class="title" style="font-size: 20px">您选择的游戏是？</label>
+        {% for b in form.upload_game %}
+            <div class="column column3">
+                <label for="{{ b.id_for_upload_game }}">
+                    {{ b.tag }}
+                    <span>{{ b.choice_label }}</span>
+                </label>
+            </div>
+            <span class="clearfix"></span>
+        {% endfor %}
+    </div>
+
+    <div class="element-separator">
+        <hr>
+        <h3 class="section-break-title"></h3>
+    </div>
+
+    <br>
+
+    <div class="element-file">
+        <label class="title" style="font-size: 20px; padding-bottom: 5px">请上传脚本</label>
+        <div class="item-cont"><label class="large">
+            <div class="button">选择文件</div>
+            {{ form.upload_script }}
+            <div class="file_text">Scan and Upload your Battle Script</div>
+            <span class="icon-place"></span></label></div>
+    </div>
+                <p style="color:#F00">{{ error }}</p>
+
+
+    <div id="submit_div" class="submit">
+        <input id="next" type="submit" value="提交">
+    </div>
+</form>
+
+<script type="text/javascript" src="{% static 'student_form/formoid-solid-green.js' %}"></script>
+
+</body>
+</html>
